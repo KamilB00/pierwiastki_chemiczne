@@ -1,0 +1,38 @@
+.mainPage {
+  
+  height: 100vh;
+}
+
+.symbol_name{
+    padding-top: 15%;
+    display: flex;
+    font-size: 15vh;
+    justify-content: center;
+    
+
+}
+
+.symbol_input{
+    display: flex;
+    padding-top: 10vh;
+    justify-content: center;
+}
+
+.value_input{
+    display: flex;
+    padding-top: 5vh;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+
+.accept_button{
+    display: flex;
+    justify-content: center;
+    margin-top: 4px;
+    margin-left: 85px;
+    margin-bottom: 10px;
+}
+.score{
+padding-top: 20px;
+padding-left: 20px;
+}
