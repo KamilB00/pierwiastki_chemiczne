@@ -4,159 +4,77 @@ import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import { connect } from "react-redux";
 import { chooseQuestion } from "../Store/actions";
-import { markQuestionWrong } from "../Store/actions";
-import { markQuestionCorrect } from "../Store/actions";
-import { removeFromAllData } from "../Store/actions";
 
-var mistakeValueCounter = 0;
-
-const MainPage = (props) => {
+const MainPage = ({ symbols, chooseQuestion }) => {
   const [symbol, setSymbol] = useState("");
-  const [value, setValue] = useState("");
-  const [valueArray, setValueArray] = useState([]);
   const [disableSymbol, setDisableSymbol] = useState(false);
-  const [error, setError] = useState(false);
-  const [flip, setFlip] = useState(false);
-  
+
   useEffect(() => {
-      chooseQuestion();
-      return () => {
+    chooseQuestion();
+  }, [chooseQuestion]);
 
-      }
-  }, [flip]);
-
-  const acceptButton = () => {
+  const acceptButton = (label) => {
     return (
       <div className="accept_button">
         <Button size="small" variant="outlined" onClick={handleClick}>
-          Zatwierdź
+          {label}
         </Button>
       </div>
     );
   };
   ///////////////////// HANDLERS
   const handleClick = () => {
-    if (disableSymbol) {
-      markValue(value, props.symbols.choice);
-    } else markSymbol(symbol.toLowerCase(), props.symbols.choice);
+    markSymbol(symbol.toLowerCase(), symbols.choice);
+  };
+
+  const handleClickDalej = () => {
+    chooseQuestion();
+    setDisableSymbol(false);
+    setSymbol("");
   };
 
   const handleSymbolChange = (event) => {
     setSymbol(event.target.value);
   };
 
-  const handleValueChange = (event) => {
-    setValue(event.target.value);
-  };
-
   const handleSubmit = (event) => {
-    if (disableSymbol) {
-      event.preventDefault();
-    } else {
-      markSymbol(symbol.toLowerCase(), props.symbols.choice);
-      event.preventDefault();
-    }
+    markSymbol(symbol.toLowerCase(), symbols.choice);
+    event.preventDefault();
   };
 
-  //////////// MARK VALUE
-  const markValue = (value, renderedValue) => {
-    if (
-      renderedValue.value.toString().includes(value.toString()) &&
-      !valueArray.toString().includes(value)
-    ) {
-      setValueArray([...valueArray, value]);
-      setError(false);
-      setValue("");
-    } else if (valueArray.length === renderedValue.value.length) {
-      if (mistakeValueCounter === 0) {
-        props.markQuestionCorrect(renderedValue);
-      }
-      setFlip(!flip);
-      mistakeValueCounter = 0;
-      setSymbol("");
-      setDisableSymbol(false);
-      setValueArray([]);
-      setValue("")
-    } else {
-      mistakeValueCounter++;
-      setError(true);
-      setValue("");
-      mistakeValueCounter++;
-      var arr = props.symbols.wrongAnswers.filter(
-        (wrong) => wrong.title === renderedValue.title
-      );
-      if (arr.length !== 0) {
-        mistakeValueCounter++;
-        console.log('is already there')
-      } else {
-        mistakeValueCounter++;
-        props.markQuestionWrong(renderedValue);
-      }
-    }
-  };
-  //////////// MARK SYMBOL
-  const markSymbol = (symbol, renderedSymbol) => {
-    if (symbol !== renderedSymbol.symbol) {
-      props.markQuestionWrong(renderedSymbol);
-
-      if (props.symbols.allData.length > 1) {
-        props.removeFromAllData(renderedSymbol);
-        props.chooseQuestion();
-      }
-      console.log("los");
-      props.chooseQuestion();
-      setSymbol("");
-    } else {
-      setDisableSymbol(true);
-    }
-    if (
-      props.symbols.allData === null &&
-      props.symbols.wrongAnswers.length > 0
-    ) {
-      if (symbol !== renderedSymbol.symbol) {
-        props.chooseQuestion();
-        setSymbol("");
-      } else {
-        setDisableSymbol(true);
-      }
-    }
-  };
-  ////////////
-  const valueInput = () => {
+  const wartosciowosc = (renderedSymbol) => {
     return (
-      <div className="value_input">
-        <TextField
-          id="outlined-basic"
-          label="Wartościowość"
-          variant="outlined"
-          color="primary"
-          onChange={handleValueChange}
-          value={value}
-          inputProps={{ maxLength: 1 }}
-          error={error}
-        />
-        {acceptButton()}
+      <div
+        style={{ display: "flex", justifyContent: "center", fontSize: "20px" , flexDirection: 'column', }}
+      >
+        <div style={{display: 'flex', alignSelf: 'center', paddingBottom: '20px', color:" green"}}>
+          {renderedSymbol.toString()}
+        </div>
+        
+        <div className="accept_button">
+          <Button size="small" variant="outlined" onClick={handleClickDalej}>
+            DALEJ
+          </Button>
+        </div>
       </div>
     );
   };
-  //////////////// RENDERED VALUES
-  const returnedList = valueArray.map((singleArrayValue) => (
-    <div className="value_input">
-      <TextField
-        id="outlined-basic"
-        label="Wartościowość"
-        variant="outlined"
-        color="primary"
-        value={singleArrayValue}
-        inputProps={{ maxLength: 1 }}
-        diasble={true}
-      />
-    </div>
-  ));
 
+  //////////// MARK SYMBOL
+  const markSymbol = (symbol, renderedSymbol) => {
+    if (symbol !== renderedSymbol.symbol) {
+      chooseQuestion();
+      setDisableSymbol(false);
+      setSymbol("");
+    } else {
+      setDisableSymbol(true);
+      wartosciowosc(renderedSymbol);
+    }
+  };
+  console.log(symbols);
   return (
     <div className="mainPage">
-      <div className="symbol_name">{props.symbols.choice.title}</div>
+      <div className="symbol_name">{symbols.choice.title}</div>
       <form noValidate autoComplete="off" onSubmit={handleSubmit}>
         <div className="symbol_input">
           <TextField
@@ -171,9 +89,9 @@ const MainPage = (props) => {
           />
         </div>
 
-        {disableSymbol ? valueInput() : acceptButton()}
-
-        {returnedList}
+        {disableSymbol
+          ? wartosciowosc(symbols.choice.value)
+          : acceptButton("ZATWIERDŹ")}
       </form>
     </div>
   );
@@ -184,7 +102,4 @@ const mapStateToProps = (state) => ({
 
 export default connect(mapStateToProps, {
   chooseQuestion,
-  markQuestionWrong,
-  markQuestionCorrect,
-  removeFromAllData,
 })(MainPage);
