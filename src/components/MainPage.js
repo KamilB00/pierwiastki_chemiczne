@@ -20,6 +20,9 @@ const MainPage = (props) => {
   
   useEffect(() => {
       chooseQuestion();
+      return () => {
+
+      }
   }, [flip]);
 
   const acceptButton = () => {
@@ -84,7 +87,7 @@ const MainPage = (props) => {
       );
       if (arr.length !== 0) {
         mistakeValueCounter++;
-        console.log("is already there");
+        console.log('is already there')
       } else {
         mistakeValueCounter++;
         props.markQuestionWrong(renderedValue);
