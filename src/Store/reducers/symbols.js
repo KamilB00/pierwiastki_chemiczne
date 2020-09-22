@@ -182,14 +182,10 @@ const initialState = {
 };
 
 const symbols = (state = initialState, action) => {
-  console.log("jest");
-
   switch (action.type) {
     case "CHOOSE_QUESTION":
       {
-        var renderedIndex = Math.floor(
-          Math.random() * state.allData.length + 0
-        );
+        var renderedIndex = Math.floor(Math.random() * state.allData.length);
         if (state.allData.length > 0) {
           return {
             ...state,
@@ -199,7 +195,9 @@ const symbols = (state = initialState, action) => {
           state.allData.length === 0 &&
           state.wrongAnswers.length > 0
         ) {
+          console.log("tu jestem");
           return {
+            ...state,
             choice: state.wrongAnswers[renderedIndex],
           };
         } else if (
@@ -207,6 +205,7 @@ const symbols = (state = initialState, action) => {
           state.wrongAnswers.length === 0
         ) {
           return {
+            ...state,
             showResults: "SHOW_RESULT",
           };
         }
@@ -215,21 +214,42 @@ const symbols = (state = initialState, action) => {
 
     case "MARK_QUESTION_AS_CORRECT":
       {
+        if (state.allData.length !== 0) {
+          if (state.allData.includes(action.choice)) {
+            return {
+              ...state,
+              correctAnswers: state.correctAnswers.concat({
+                ...action.choice,
+                correct: true,
+              }),
+            };
+          }
+        } else return state;
       }
 
       break;
     case "MARK_QUESTION_AS_WRONG":
+      console.log("length: ", state.allData.length);
       {
-        if (state.allData.includes(action.choice)) {
-          return {
-            ...state,
-            wrongAnswers: state.wrongAnswers.concat({
-              ...action.choice,
-              correct: false,
-            }),
-          };
+        if (state.allData.length !== 0) {
+          if (state.allData.includes(action.choice)) {
+            console.log("console log 1");
+            return {
+              ...state,
+              wrongAnswers: state.wrongAnswers.concat({
+                ...action.choice,
+                correct: false,
+              }),
+            };
+          }
+        } else {
+          if (state.wrongAnswers.includes(action.choice)) {
+            console.log("zawiera juz to BŁĘDNE pytanie");
+
+            return state;
+          }
         }
-        
+        return state;
       }
       break;
 
@@ -241,6 +261,7 @@ const symbols = (state = initialState, action) => {
         ),
       };
     }
+
     default:
       return state;
   }

@@ -1,38 +1,66 @@
 .mainPage {
-  
   height: 100vh;
 }
 
-.symbol_name{
-    padding-top: 15%;
-    display: flex;
-    font-size: 15vh;
-    justify-content: center;
-    
-
+.symbol_name {
+  flex-wrap: wrap;
+  padding-top: 10%;
+  display: flex;
+  font-size: 15vw;
+  justify-content: center;
 }
 
-.symbol_input{
-    display: flex;
-    padding-top: 10vh;
-    justify-content: center;
+.symbol_input {
+  display: flex;
+  padding-top: 10vw;
+  justify-content: center;
 }
 
-.value_input{
+.value_input {
+  display: flex;
+  padding-top: 5vh;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+
+.accept_button {
+  display: flex;
+  justify-content: center;
+  margin-top: 4px;
+  margin-left: 85px;
+  margin-bottom: 10px;
+}
+.score {
+  padding-top: 20px;
+  padding-left: 20px;
+}
+
+@media screen and (max-width: 600px) {
+    .mainPage {
+        display: flex;
+        flex-direction: column;
+
+      }
+      .symbol_name {
+       
+        padding-bottom:60%;
+        
+      }
+  .accept_button {
     display: flex;
-    padding-top: 5vh;
+    margin-top: 0px;
+    margin-left: 0px;
+    margin-bottom: 0px;
+    height: 53px;
+  }
+
+  .value_input {
+    display: flex;
     justify-content: center;
     margin-bottom: 10px;
-}
-
-.accept_button{
-    display: flex;
-    justify-content: center;
-    margin-top: 4px;
-    margin-left: 85px;
-    margin-bottom: 10px;
-}
-.score{
-padding-top: 20px;
-padding-left: 20px;
+  }
+  
+  .symbol_input {
+    padding-bottom: 60px;
+  }
 }
