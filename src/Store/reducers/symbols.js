@@ -76,7 +76,7 @@ const initialState = {
       value: [2, 3, 4, 6, 7],
     },
     {
-      title: "Maganez",
+      title: "Magnez",
       symbol: "mg",
       value: [2],
     },
