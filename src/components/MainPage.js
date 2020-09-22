@@ -17,9 +17,9 @@ const MainPage = (props) => {
   const [disableSymbol, setDisableSymbol] = useState(false);
   const [error, setError] = useState(false);
   const [flip, setFlip] = useState(false);
-
+  
   useEffect(() => {
-    props.chooseQuestion();
+      chooseQuestion();
   }, [flip]);
 
   const acceptButton = () => {
@@ -94,8 +94,6 @@ const MainPage = (props) => {
   //////////// MARK SYMBOL
   const markSymbol = (symbol, renderedSymbol) => {
     if (symbol !== renderedSymbol.symbol) {
-      console.log(renderedSymbol);
-      // console.log(props.symbols.allData.length);
       props.markQuestionWrong(renderedSymbol);
 
       if (props.symbols.allData.length > 1) {
@@ -155,12 +153,6 @@ const MainPage = (props) => {
 
   return (
     <div className="mainPage">
-      <div className="score">
-        {/* {" "}
-        poprawne: {props.symbols.correctAnswers.length} / złe :{" "}
-        {props.symbols.wrongAnswers.length} /wszystkie:{" "}
-        {props.symbols.allData.length} */}
-      </div>
       <div className="symbol_name">{props.symbols.choice.title}</div>
       <form noValidate autoComplete="off" onSubmit={handleSubmit}>
         <div className="symbol_input">

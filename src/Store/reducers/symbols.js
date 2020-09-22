@@ -184,74 +184,65 @@ const initialState = {
 const symbols = (state = initialState, action) => {
   switch (action.type) {
     case "CHOOSE_QUESTION":
-      {
-        var renderedIndex = Math.floor(Math.random() * state.allData.length);
-        if (state.allData.length > 0) {
-          return {
-            ...state,
-            choice: state.allData[renderedIndex],
-          };
-        } else if (
-          state.allData.length === 0 &&
-          state.wrongAnswers.length > 0
-        ) {
-          console.log("tu jestem");
-          return {
-            ...state,
-            choice: state.wrongAnswers[renderedIndex],
-          };
-        } else if (
-          state.allData.length === 0 &&
-          state.wrongAnswers.length === 0
-        ) {
-          return {
-            ...state,
-            showResults: "SHOW_RESULT",
-          };
-        }
+      var renderedIndex = Math.floor(Math.random() * state.allData.length);
+      if (state.allData.length > 0) {
+        return {
+          ...state,
+          choice: state.allData[renderedIndex],
+        };
+      } else if (state.allData.length === 0 && state.wrongAnswers.length > 0) {
+        console.log("tu jestem");
+        return {
+          ...state,
+          choice: state.wrongAnswers[renderedIndex],
+        };
+      } else if (
+        state.allData.length === 0 &&
+        state.wrongAnswers.length === 0
+      ) {
+        return {
+          ...state,
+          showResults: "SHOW_RESULT",
+        };
       }
+
       break;
 
     case "MARK_QUESTION_AS_CORRECT":
-      {
-        if (state.allData.length !== 0) {
-          if (state.allData.includes(action.choice)) {
-            return {
-              ...state,
-              correctAnswers: state.correctAnswers.concat({
-                ...action.choice,
-                correct: true,
-              }),
-            };
-          }
-        } else return state;
-      }
+      if (state.allData.length !== 0) {
+        if (state.allData.includes(action.choice)) {
+          return {
+            ...state,
+            correctAnswers: state.correctAnswers.concat({
+              ...action.choice,
+              correct: true,
+            }),
+          };
+        }
+      } else return state;
 
       break;
     case "MARK_QUESTION_AS_WRONG":
-      console.log("length: ", state.allData.length);
-      {
-        if (state.allData.length !== 0) {
-          if (state.allData.includes(action.choice)) {
-            console.log("console log 1");
-            return {
-              ...state,
-              wrongAnswers: state.wrongAnswers.concat({
-                ...action.choice,
-                correct: false,
-              }),
-            };
-          }
-        } else {
-          if (state.wrongAnswers.includes(action.choice)) {
-            console.log("zawiera juz to BŁĘDNE pytanie");
-
-            return state;
-          }
+      if (state.allData.length !== 0) {
+        if (state.allData.includes(action.choice)) {
+          console.log("console log 1");
+          return {
+            ...state,
+            wrongAnswers: state.wrongAnswers.concat({
+              ...action.choice,
+              correct: false,
+            }),
+          };
         }
-        return state;
+      } else {
+        if (state.wrongAnswers.includes(action.choice)) {
+          console.log("zawiera juz to BŁĘDNE pytanie");
+
+          return state;
+        }
       }
-      break;
+      return state;
+
 
     case "REMOVE_FROM_ALLDATA": {
       return {
