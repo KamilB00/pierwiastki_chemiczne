@@ -8,6 +8,7 @@ import { chooseQuestion } from "../Store/actions";
 const MainPage = ({ symbols, chooseQuestion }) => {
   const [symbol, setSymbol] = useState("");
   const [disableSymbol, setDisableSymbol] = useState(false);
+  const [error, setError] = useState(false)
 
   useEffect(() => {
     chooseQuestion();
@@ -60,18 +61,32 @@ const MainPage = ({ symbols, chooseQuestion }) => {
     );
   };
 
+  const pierwiastek = (renderedSymbol) => {
+    return (
+      <div
+        style={{ display: "flex", justifyContent: "center", fontSize: "20px" , flexDirection: 'column', }}
+      >
+        <div style={{display: 'flex', alignSelf: 'center', paddingBottom: '20px', color:" red"}}>
+          {renderedSymbol.toUpperCase()}
+        </div>
+      </div>
+    );
+  };
+
   //////////// MARK SYMBOL
   const markSymbol = (symbol, renderedSymbol) => {
     if (symbol !== renderedSymbol.symbol) {
-      chooseQuestion();
+      setError(true)
       setDisableSymbol(false);
+      pierwiastek(renderedSymbol.symbol);
       setSymbol("");
     } else {
+      setError(false);
       setDisableSymbol(true);
       wartosciowosc(renderedSymbol);
     }
   };
-  console.log(symbols);
+  
   return (
     <div className="mainPage">
       <div className="symbol_name">{symbols.choice.title}</div>
@@ -86,12 +101,16 @@ const MainPage = ({ symbols, chooseQuestion }) => {
             onChange={handleSymbolChange}
             value={symbol}
             disabled={disableSymbol}
+            error={error}
           />
         </div>
+        {error ? pierwiastek(symbols.choice.symbol) : ''}
 
         {disableSymbol
           ? wartosciowosc(symbols.choice.value)
           : acceptButton("ZATWIERDŹ")}
+
+          
       </form>
     </div>
   );
