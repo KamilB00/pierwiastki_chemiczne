@@ -1,7 +1,9 @@
-## Pierwiastki chemiczne (Chemical elements)
+## Pierwiastki chemiczne 
 
 Aplikacja umożliwiająca naukę pierwiastków chemicznych 
-[Click here] https://pierwiastek.netlify.app/
+[Kliknij tutaj](https://pierwiastek.netlify.app/) 
+
+
 
 
 
